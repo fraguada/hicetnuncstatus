@@ -1,18 +1,88 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8">
-        <link rel="icon" href="data:,">
-        <title>{{title}}</title>
-        <style>
-            body {
-                font-family: 'Courier New', Courier, monospace;
-            }
-        </style>
-    </head>
-    <body>
+
+<head>
+    <meta charset="utf-8">
+    <link rel="icon" href="data:,">
+    <title>{{title}}</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            width: 100vw;
+            margin: 0;
+        }
+
+        .container {
+            height: auto;
+            width: auto;
+            border: solid;
+            padding: 5vh 5vw;
+            background: white
+        }
+
+        canvas {
+            position: absolute;
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            z-index: -1;
+        }
+    </style>
+    <script src='http://joeiddon.github.io/perlin/perlin.js'></script>
+
+</head>
+
+<body>
+    <div class="container">
         <h1>hicetnunc.xyz status</h1>
         <p>Site: {{site.emoji}} {{site.status}} {{site.statusText}}</p>
         <p>Feed: {{feed.emoji}} {{feed.status}} {{feed.statusText}}</p>
-    </body>
+    </div>
+    <canvas></canvas>
+    <script>
+        const c = document.querySelector('canvas')
+        const ctx = c.getContext('2d')
+        const rez = 50
+        const scale = 0.002
+        let t = 0
+
+
+        setCanvasSize()
+        window.requestAnimationFrame(draw);
+
+        function draw() {
+            ctx.clearRect(0, 0, c.width, c.height);
+            t += 0.0001
+            let h = Math.ceil(c.height / rez * c.width / c.height)
+            let w = Math.ceil(c.width / rez)
+            for (let j = 0; j < c.height; j += h)
+                for (let i = 0; i < c.width; i += w) {
+                    ctx.beginPath()
+                    let n = perlin.get(i * scale + t, j * scale)
+                    if (n < 0) {
+                        ctx.moveTo(i, j)
+                        ctx.lineTo(i + w, j + h)
+                    } else {
+                        ctx.moveTo(i, j + h)
+                        ctx.lineTo(i + w, j)
+                    }
+                    ctx.stroke()
+                }
+
+            window.requestAnimationFrame(draw);
+        }
+
+        function setCanvasSize() {
+            c.width = window.innerWidth
+            c.height = window.innerHeight
+        }
+
+        window.addEventListener('resize', setCanvasSize);
+    </script>
+</body>
+
 </html>
