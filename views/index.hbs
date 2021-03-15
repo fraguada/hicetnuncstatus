@@ -8,6 +8,7 @@
     <style>
         body {
             font-family: 'Courier New', Courier, monospace;
+            font-size: 1.2rem;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -31,6 +32,16 @@
             margin: 0;
             z-index: -1;
         }
+
+        a {
+            color: black;
+            background: none
+        }
+
+        a:hover {
+            color: white;
+            background: black
+        }
     </style>
     <script src='https://joeiddon.github.io/perlin/perlin.js'></script>
 
@@ -38,7 +49,7 @@
 
 <body>
     <div class="container">
-        <h1>hicetnunc.xyz status</h1>
+        <h1><a href="https://hicetnunc.xyz">hicetnunc.xyz</a> status</h1>
         <p>site: {{site.emoji}} {{site.status}} {{site.statusText}}</p>
         <p>feed: {{feed.emoji}} {{feed.status}} {{feed.statusText}}</p>
         <p><a href="https://github.com/fraguada/hicetnuncstatus">source</a></a></p>
@@ -47,10 +58,9 @@
     <script>
         const c = document.querySelector('canvas')
         const ctx = c.getContext('2d')
-        const rez = 50
         const scale = 0.002
+        let rez = 0
         let t = 0
-
 
         setCanvasSize()
         window.requestAnimationFrame(draw);
@@ -80,6 +90,7 @@
         function setCanvasSize() {
             c.width = window.innerWidth
             c.height = window.innerHeight
+            rez = c.width / 50
         }
 
         window.addEventListener('resize', setCanvasSize);
